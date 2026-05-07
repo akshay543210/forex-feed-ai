@@ -9,13 +9,43 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SearchRouteImport } from './routes/search'
+import { Route as PromoCodesRouteImport } from './routes/promo-codes'
+import { Route as PayoutsRouteImport } from './routes/payouts'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PropFirmsIndexRouteImport } from './routes/prop-firms.index'
+import { Route as PropFirmsSlugRouteImport } from './routes/prop-firms.$slug'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PromoCodesRoute = PromoCodesRouteImport.update({
+  id: '/promo-codes',
+  path: '/promo-codes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PayoutsRoute = PayoutsRouteImport.update({
+  id: '/payouts',
+  path: '/payouts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PropFirmsIndexRoute = PropFirmsIndexRouteImport.update({
+  id: '/prop-firms/',
+  path: '/prop-firms/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PropFirmsSlugRoute = PropFirmsSlugRouteImport.update({
+  id: '/prop-firms/$slug',
+  path: '/prop-firms/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategorySlugRoute = CategorySlugRouteImport.update({
@@ -31,41 +61,121 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/payouts': typeof PayoutsRoute
+  '/promo-codes': typeof PromoCodesRoute
+  '/search': typeof SearchRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
+  '/prop-firms/$slug': typeof PropFirmsSlugRoute
+  '/prop-firms/': typeof PropFirmsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/payouts': typeof PayoutsRoute
+  '/promo-codes': typeof PromoCodesRoute
+  '/search': typeof SearchRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
+  '/prop-firms/$slug': typeof PropFirmsSlugRoute
+  '/prop-firms': typeof PropFirmsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/payouts': typeof PayoutsRoute
+  '/promo-codes': typeof PromoCodesRoute
+  '/search': typeof SearchRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
+  '/prop-firms/$slug': typeof PropFirmsSlugRoute
+  '/prop-firms/': typeof PropFirmsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/blog/$slug' | '/category/$slug'
+  fullPaths:
+    | '/'
+    | '/payouts'
+    | '/promo-codes'
+    | '/search'
+    | '/blog/$slug'
+    | '/category/$slug'
+    | '/prop-firms/$slug'
+    | '/prop-firms/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/blog/$slug' | '/category/$slug'
-  id: '__root__' | '/' | '/blog/$slug' | '/category/$slug'
+  to:
+    | '/'
+    | '/payouts'
+    | '/promo-codes'
+    | '/search'
+    | '/blog/$slug'
+    | '/category/$slug'
+    | '/prop-firms/$slug'
+    | '/prop-firms'
+  id:
+    | '__root__'
+    | '/'
+    | '/payouts'
+    | '/promo-codes'
+    | '/search'
+    | '/blog/$slug'
+    | '/category/$slug'
+    | '/prop-firms/$slug'
+    | '/prop-firms/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PayoutsRoute: typeof PayoutsRoute
+  PromoCodesRoute: typeof PromoCodesRoute
+  SearchRoute: typeof SearchRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CategorySlugRoute: typeof CategorySlugRoute
+  PropFirmsSlugRoute: typeof PropFirmsSlugRoute
+  PropFirmsIndexRoute: typeof PropFirmsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/promo-codes': {
+      id: '/promo-codes'
+      path: '/promo-codes'
+      fullPath: '/promo-codes'
+      preLoaderRoute: typeof PromoCodesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payouts': {
+      id: '/payouts'
+      path: '/payouts'
+      fullPath: '/payouts'
+      preLoaderRoute: typeof PayoutsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prop-firms/': {
+      id: '/prop-firms/'
+      path: '/prop-firms'
+      fullPath: '/prop-firms/'
+      preLoaderRoute: typeof PropFirmsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prop-firms/$slug': {
+      id: '/prop-firms/$slug'
+      path: '/prop-firms/$slug'
+      fullPath: '/prop-firms/$slug'
+      preLoaderRoute: typeof PropFirmsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/category/$slug': {
@@ -87,9 +197,24 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PayoutsRoute: PayoutsRoute,
+  PromoCodesRoute: PromoCodesRoute,
+  SearchRoute: SearchRoute,
   BlogSlugRoute: BlogSlugRoute,
   CategorySlugRoute: CategorySlugRoute,
+  PropFirmsSlugRoute: PropFirmsSlugRoute,
+  PropFirmsIndexRoute: PropFirmsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
