@@ -25,15 +25,15 @@ function AdminBlogs() {
   }, [filter]);
 
   const load = async () => {
-    let q = supabase.from("blogs").select("id,slug,title,status,source,created_at,ai_quality_score").order("created_at", { ascending: false }).limit(100);
-    if (filter !== "all") q = q.eq("status", filter);
-    const { data } = await q;
+    const base = supabase.from("blogs").select("id,slug,title,status,source,created_at,ai_quality_score").order("created_at", { ascending: false }).limit(100);
+    const { data } = filter === "all" ? await base : await base.eq("status", filter as "draft"|"pending_approval"|"published"|"rejected"|"scheduled");
     setRows((data as Row[]) ?? []);
   };
 
-  const setStatus = async (id: string, status: string) => {
-    const patch: Record<string, unknown> = { status };
-    if (status === "published") patch.published_at = new Date().toISOString();
+  const setStatus = async (id: string, status: "published"|"rejected"|"draft") => {
+    const patch = status === "published"
+      ? { status, published_at: new Date().toISOString() }
+      : { status };
     await supabase.from("blogs").update(patch).eq("id", id);
     load();
   };
