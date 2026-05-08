@@ -16,6 +16,7 @@ import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as PromoCodesRouteImport } from './routes/promo-codes'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PayoutsRouteImport } from './routes/payouts'
+import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AccountRouteImport } from './routes/account'
@@ -63,6 +64,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const PayoutsRoute = PayoutsRouteImport.update({
   id: '/payouts',
   path: '/payouts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DisclaimerRoute = DisclaimerRouteImport.update({
+  id: '/disclaimer',
+  path: '/disclaimer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/payouts': typeof PayoutsRoute
   '/privacy': typeof PrivacyRoute
   '/promo-codes': typeof PromoCodesRoute
@@ -159,6 +166,7 @@ export interface FileRoutesByTo {
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/payouts': typeof PayoutsRoute
   '/privacy': typeof PrivacyRoute
   '/promo-codes': typeof PromoCodesRoute
@@ -182,6 +190,7 @@ export interface FileRoutesById {
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/payouts': typeof PayoutsRoute
   '/privacy': typeof PrivacyRoute
   '/promo-codes': typeof PromoCodesRoute
@@ -206,6 +215,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/auth'
     | '/contact'
+    | '/disclaimer'
     | '/payouts'
     | '/privacy'
     | '/promo-codes'
@@ -228,6 +238,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/auth'
     | '/contact'
+    | '/disclaimer'
     | '/payouts'
     | '/privacy'
     | '/promo-codes'
@@ -250,6 +261,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/auth'
     | '/contact'
+    | '/disclaimer'
     | '/payouts'
     | '/privacy'
     | '/promo-codes'
@@ -273,6 +285,7 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRoute
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
+  DisclaimerRoute: typeof DisclaimerRoute
   PayoutsRoute: typeof PayoutsRoute
   PrivacyRoute: typeof PrivacyRoute
   PromoCodesRoute: typeof PromoCodesRoute
@@ -339,6 +352,13 @@ declare module '@tanstack/react-router' {
       path: '/payouts'
       fullPath: '/payouts'
       preLoaderRoute: typeof PayoutsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/disclaimer': {
+      id: '/disclaimer'
+      path: '/disclaimer'
+      fullPath: '/disclaimer'
+      preLoaderRoute: typeof DisclaimerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -441,6 +461,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRoute,
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
+  DisclaimerRoute: DisclaimerRoute,
   PayoutsRoute: PayoutsRoute,
   PrivacyRoute: PrivacyRoute,
   PromoCodesRoute: PromoCodesRoute,
