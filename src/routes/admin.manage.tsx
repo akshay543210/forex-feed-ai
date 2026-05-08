@@ -240,7 +240,7 @@ function UsersAdmin() {
         ))}
       </div>
       {msg && <p className="text-xs">{msg}</p>}
-      {email}{setEmail && ""}
+      
     </div>
   );
 }
