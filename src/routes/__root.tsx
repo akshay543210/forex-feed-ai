@@ -72,14 +72,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "propfirmknowledge" },
+      { name: "description", content: "PropFirm Insights is an AI-powered platform for automated forex and prop firm news, reviews, and education." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "propfirmknowledge" },
+      { property: "og:description", content: "PropFirm Insights is an AI-powered platform for automated forex and prop firm news, reviews, and education." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "propfirmknowledge" },
+      { name: "twitter:description", content: "PropFirm Insights is an AI-powered platform for automated forex and prop firm news, reviews, and education." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/jTRbQWys4nWmuQwEnqxDH1fIWVo2/social-images/social-1778222014523-20260117_155732.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/jTRbQWys4nWmuQwEnqxDH1fIWVo2/social-images/social-1778222014523-20260117_155732.webp" },
     ],
     links: [
       {
