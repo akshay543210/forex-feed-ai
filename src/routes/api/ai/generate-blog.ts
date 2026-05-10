@@ -96,15 +96,22 @@ Output strict JSON only.`;
 
   const userPrompt = `Topic: ${opts.topic}
 
-Write a 1200–1800 word original news/analysis article following the FORMAT RULES exactly. Return JSON with this exact shape:
+Write a 1200–1800 word original news/analysis article following the FORMAT RULES exactly.
+
+INLINE IMAGES: Inside the markdown content, insert EXACTLY 3 inline image placeholders at natural breakpoints (after the hook, mid-article, and before "## Key Takeaways"). Use this exact syntax on its own line:
+[[IMAGE:1|alt text describing image|vivid one-sentence editorial photo prompt, no text/logos]]
+[[IMAGE:2|...|...]]
+[[IMAGE:3|...|...]]
+
+Return JSON with this exact shape:
 {
   "title": "SEO-optimized headline (under 70 chars)",
   "seo_title": "alternate SEO title under 60 chars",
   "seo_description": "compelling meta description under 155 chars",
   "seo_keywords": ["5","to","8","keywords"],
   "excerpt": "2-3 sentence hook",
-  "content": "FULL article in markdown following format rules: hook paragraph, ## sections, short paragraphs, bullet/numbered lists, **bold** highlights, > quotes, ## Key Takeaways, ## Bottom Line",
-  "cover_image_prompt": "vivid one-sentence description of the ideal editorial cover image for this article (subject + mood, no text)",
+  "content": "FULL article markdown WITH the 3 [[IMAGE:n|alt|prompt]] placeholders embedded inline",
+  "cover_image_prompt": "vivid one-sentence description of the ideal editorial cover image (subject + mood, no text)",
   "faq": [{"question":"...","answer":"..."}, ... 3-5 items],
   "category_slug": "one of: forex-news, fundamentals, prop-firm-reviews, payout-updates, promo-codes, industry-news, trading-education, scam-alerts, trading-psychology, market-analysis"
 }`;
@@ -130,6 +137,20 @@ Write a 1200–1800 word original news/analysis article following the FORMAT RUL
   const dataUrl = await generateCoverImage(imgPrompt);
   if (dataUrl) coverUrl = await uploadCoverFromDataUrl(admin, dataUrl, slug);
 
+  // Process inline image placeholders [[IMAGE:n|alt|prompt]]
+  let processedContent: string = parsed.content;
+  const placeholderRe = /\[\[IMAGE:(\d+)\|([^|]+)\|([^\]]+)\]\]/g;
+  const matches = [...processedContent.matchAll(placeholderRe)];
+  for (const m of matches) {
+    const [full, n, alt, prompt] = m;
+    try {
+      const d = await generateCoverImage(prompt.trim());
+      if (!d) { processedContent = processedContent.replace(full, ""); continue; }
+      const url = await uploadCoverFromDataUrl(admin, d, `${slug}-inline-${n}`);
+      processedContent = processedContent.replace(full, url ? `\n\n![${alt.trim()}](${url})\n\n` : "");
+    } catch { processedContent = processedContent.replace(full, ""); }
+  }
+
   const status = opts.source === "ai_auto"
     ? (cat?.workflow_mode === "auto_publish" ? "published" : cat?.workflow_mode === "draft_only" ? "draft" : "pending_approval")
     : "draft";
@@ -138,7 +159,7 @@ Write a 1200–1800 word original news/analysis article following the FORMAT RUL
     slug,
     title: parsed.title,
     excerpt: parsed.excerpt,
-    content: parsed.content,
+    content: processedContent,
     cover_image_url: coverUrl,
     seo_title: parsed.seo_title,
     seo_description: parsed.seo_description,
